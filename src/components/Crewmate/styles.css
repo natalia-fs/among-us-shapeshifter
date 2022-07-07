@@ -80,7 +80,7 @@
 
 .back{
   height: 120px;
-  width: 25px;
+  width: 35px;
   /* background-color: #EA1616; */
   background-color: var(--color);
   border: 10px solid black;
