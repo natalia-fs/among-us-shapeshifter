@@ -27,7 +27,7 @@ function App() {
       {
         crewmates.map((crewmate: Crewmate) => {
           return (
-            <Crewmate key={crewmate.id}/>
+            <Crewmate color={crewmate.color} id={crewmate.id} key={crewmate.id}/>
           )
         })
       }
