@@ -7,11 +7,20 @@ interface CrewmateProps{
 }
 
 export function Crewmate({ id, color } : CrewmateProps){
-  // const color: string = '#4fbfd3';
-  // document.documentElement.style.setProperty('--color', color);
+  function handleSelectCrewmate(){
+    if( id.includes('*') ){
+      console.log('SHAPESHIFTER!')
+    }
+    else if( id.includes('#') )
+    console.log('"Cara, eu acabei de fazer visual task"')
+  }
+  
   return (
     // <span className="draw">
-      <Container color={color}>
+      <Container
+        color={color}
+        onClick={handleSelectCrewmate}
+      >
         <div className="crew-shadow" style={{background: color}}></div>
         <div className="crew">
           <div className="legs-shadow"></div>
