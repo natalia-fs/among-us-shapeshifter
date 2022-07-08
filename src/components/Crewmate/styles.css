@@ -1,4 +1,6 @@
-
+span.draw{
+  position: relative;
+}
 .crew{
   /* background-color: #840931; */
   height: 200px;
