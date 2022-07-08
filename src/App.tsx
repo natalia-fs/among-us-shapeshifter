@@ -10,7 +10,7 @@ function App() {
   const crewmates = [
     {id: 'Red', color:'#c51111'},
     {id: 'Blue', color: '#132ed1'},
-    {id: 'DarkGreen', color:'#117f2d'},
+    {id: 'Green', color:'#117f2d'},
     {id: 'Pink', color: '#fb69be'},
     {id: 'Orange', color: '#e8790e'},
     {id: 'Yellow', color: '#f5f557'},
@@ -19,10 +19,16 @@ function App() {
     {id: 'Purple', color: '#6d3ec0'},
     {id: 'Brown', color: '#764a1d'},
     {id: 'Cyan', color: '#28eae1'},
-    {id: 'LightGreen', color: '#45d633'},
+    {id: 'Lime', color: '#45d633'},
+    {id: 'Maroon', color: '#6b2b3c'},
+    {id: 'Rose', color: '#ecc0d3'},
+    {id: 'Banana', color: '#fffebe'},
+    {id: 'Gray', color: '#8397a7'},
+    {id: 'Tan', color: '#928776'},
+    {id: 'Coral', color: '#ec7578'},
   ];
 
-  const sliceLimit = 12;
+  const sliceLimit = 18;
 
   function shuffleCrewmates(crew: Array<Crewmate>, sliceLimit: number): Array<Crewmate>{
     let slicedCrewmateArray = crew.slice(0, sliceLimit);
