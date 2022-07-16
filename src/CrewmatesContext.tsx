@@ -1,4 +1,5 @@
 import { createContext, useContext, ReactNode } from "react";
+import { toast } from 'react-toastify';
 
 export interface Crewmate{
   id: string;
@@ -25,12 +26,19 @@ export function CrewmatesProvider( { children }: CrewmateProviderProps ){
 
   function selectCrewmate(crewmate: Crewmate){
     if( crewmate.id.includes('*') ){
-      console.log('Não sou eu! CONFIA');
+      toast.success(`Parabéns, você encontrou o metamorfo!   ${crewmate.id} diz: "Não sou eu! CONFIA"`, {
+        position: toast.POSITION.BOTTOM_CENTER
+      });
     }
     else if( crewmate.id.includes('#') )
-      console.log('"Cara, eu acabei de fazer visual task"');
-    else
-      console.log('Não sou o metamorfo, há dois tripulantes iguais e eu não sou um deles!')
+      toast('"Cara, eu acabei de fazer visual task"', {
+        position: toast.POSITION.BOTTOM_CENTER
+      });
+    else{
+      toast(`${crewmate.id} diz: "Não sou o metamorfo, há dois tripulantes IGUAIS e eu não sou um deles!"`, {
+        position: toast.POSITION.BOTTOM_CENTER
+      });
+    }
   }
 
   return (

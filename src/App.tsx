@@ -1,3 +1,4 @@
+import { ToastContainer } from 'react-toastify';
 import './App.css'
 import { Crewmate } from './components/Crewmate'
 import { CrewmatesProvider, Crewmate as CrewmateType } from './CrewmatesContext';
@@ -45,6 +46,18 @@ function App() {
   }
   return (
     <CrewmatesProvider>
+      <ToastContainer
+        position="top-right"
+        autoClose={4000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        limit={4}
+        pauseOnHover
+        pauseOnFocusLoss={false}
+        draggable
+      />
       <div className="App">
         <div className="gridContainer">
           {
