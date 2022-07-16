@@ -1,10 +1,6 @@
 import './App.css'
 import { Crewmate } from './components/Crewmate'
-
-interface Crewmate{
-  id: string;
-  color: string;
-}
+import { CrewmatesProvider, Crewmate as CrewmateType } from './CrewmatesContext';
 
 function App() {
   const crewmates = [
@@ -31,7 +27,7 @@ function App() {
 
   const sliceLimit = crewmates.length;
 
-  function shuffleCrewmates(crew: Array<Crewmate>, sliceLimit: number): Array<Crewmate>{
+  function shuffleCrewmates(crew: Array<CrewmateType>, sliceLimit: number): Array<CrewmateType>{
     let slicedCrewmateArray = crew.slice(0, sliceLimit);
     let currentIndex = slicedCrewmateArray.length+1;
     let randomIndex;
@@ -48,17 +44,19 @@ function App() {
     return slicedCrewmateArray;
   }
   return (
-    <div className="App">
-      <div className="gridContainer">
-        {
-          shuffleCrewmates(crewmates, sliceLimit).map((crewmate: Crewmate) => {
-            return (
-              <Crewmate color={crewmate.color} id={crewmate.id} key={crewmate.id}/>
-            )
-          })
-        }
+    <CrewmatesProvider>
+      <div className="App">
+        <div className="gridContainer">
+          {
+            shuffleCrewmates(crewmates, sliceLimit).map((crewmate: CrewmateType) => {
+              return (
+                <Crewmate crewmate={crewmate} key={crewmate.id}/>
+              )
+            })
+          }
+        </div>
       </div>
-    </div>
+    </CrewmatesProvider>
   )
 }
 
