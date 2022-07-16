@@ -26,9 +26,10 @@ function App() {
     {id: 'Gray', color: '#8397a7'},
     {id: 'Tan', color: '#928776'},
     {id: 'Coral', color: '#ec7578'},
+    {id: 'Dodgerblue', color: '#1e90ff'},
   ];
 
-  const sliceLimit = 18;
+  const sliceLimit = crewmates.length;
 
   function shuffleCrewmates(crew: Array<Crewmate>, sliceLimit: number): Array<Crewmate>{
     let slicedCrewmateArray = crew.slice(0, sliceLimit);
