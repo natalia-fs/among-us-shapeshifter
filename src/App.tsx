@@ -48,13 +48,15 @@ function App() {
   }
   return (
     <div className="App">
-      {
-        shuffleCrewmates(crewmates, sliceLimit).map((crewmate: Crewmate) => {
-          return (
-            <Crewmate color={crewmate.color} id={crewmate.id} key={crewmate.id}/>
-          )
-        })
-      }
+      <div className="gridContainer">
+        {
+          shuffleCrewmates(crewmates, sliceLimit).map((crewmate: Crewmate) => {
+            return (
+              <Crewmate color={crewmate.color} id={crewmate.id} key={crewmate.id}/>
+            )
+          })
+        }
+      </div>
     </div>
   )
 }
