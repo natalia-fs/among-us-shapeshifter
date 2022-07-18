@@ -1,5 +1,7 @@
 import { createContext, useContext, ReactNode, useState, useEffect } from "react";
 import { toast } from 'react-toastify';
+import { EndingModal } from "./components/Modals/EndingModal";
+import { StartingModal } from "./components/Modals/StartingModal";
 
 export interface Crewmate{
   id: string;
@@ -7,16 +9,29 @@ export interface Crewmate{
 }
 
 interface CrewmateProviderProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 interface CrewmatesContextData {
   crew: Crewmate[];
   selectCrewmate: (crewmate: Crewmate) => void;
   shuffleCrewmates: (crewmates: Crewmate[], sliceLimit: number) => Crewmate[];
+  minutes: number;
+  seconds: number;
+  hasFinished: boolean;
+  isActive: boolean;
+  score: number;
+  updateScore: (points: number) => void;
+  resetGame: () => void;
+  startTimer: () => void;
+  resetTimer: () => void;
+  openStartingModal: () => void;
+  closeStartingModal: () => void;
+  openEndingModal: () => void;
+  closeEndingModal: () => void;
 }
 
-const CrewmatesContext = createContext<CrewmatesContextData>(
+export const CrewmatesContext = createContext<CrewmatesContextData>(
   {} as CrewmatesContextData
 );
 
@@ -42,33 +57,102 @@ const crewmates = [
   {id: 'Dodgerblue', color: '#1e90ff'},
 ];
 
-const sliceLimit = crewmates.length;
+const crewSliceLimit = crewmates.length;
+
+export function shuffle(crewArray?: Array<Crewmate>, sliceLimit?: number): Crewmate[]{
+  if(!sliceLimit) sliceLimit = crewSliceLimit;
+  if(!crewArray) crewArray = [...crewmates];
+  
+  let slicedCrewmateArray = [...crewArray].slice(0, sliceLimit);
+  let currentIndex = slicedCrewmateArray.length+1;
+  let randomIndex;
+  // Alterando a string do id, para diferenciar os tripulantes clonados
+  let shapeshifter = slicedCrewmateArray[Math.floor(Math.random() * (currentIndex-1) )];
+  shapeshifter.id+='*';
+  slicedCrewmateArray.push({
+    id: shapeshifter.id.replace('*','#'),
+    color: shapeshifter.color
+  });
+  while(currentIndex !== 0){
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    [slicedCrewmateArray[currentIndex], slicedCrewmateArray[randomIndex]] = [slicedCrewmateArray[randomIndex], slicedCrewmateArray[currentIndex]];
+  }
+  return slicedCrewmateArray;
+}
+
+let TimerTimeout: NodeJS.Timeout;
 
 export function CrewmatesProvider( { children }: CrewmateProviderProps ){
-  // const [crewmates, setCrewmates] = useState<Crewmate[]>([]);
-  const [ crew, setCrew ] = useState<Crewmate[]>( () => {
-    return shuffleCrewmates(crewmates, sliceLimit);
-  })
+  const defaultTime = 400;
+  const [time, setTime] = useState(defaultTime);
+  const [isActive, setIsActive] = useState(false);
+  const [hasFinished, setHasFinished] = useState(false);
 
-  function shuffle(crewArray: Array<Crewmate>, sliceLimit: number): Crewmate[]{
-    let slicedCrewmateArray = crewArray.slice(0, sliceLimit);
-    let currentIndex = slicedCrewmateArray.length+1;
-    let randomIndex;
-    // Alterando a string do id, para diferenciar os tripulantes clonados
-    let shapeshifter = slicedCrewmateArray[Math.floor(Math.random() * (currentIndex-1) )];
-    shapeshifter.id+='*';
-    slicedCrewmateArray.push({
-      id: shapeshifter.id.replace('*','#'),
-      color: shapeshifter.color
-    });
-    while(currentIndex !== 0){
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
+  const [ score, setScore ] = useState(0);
 
-     [slicedCrewmateArray[currentIndex], slicedCrewmateArray[randomIndex]] = [slicedCrewmateArray[randomIndex], slicedCrewmateArray[currentIndex]];
-    }
-    return slicedCrewmateArray;
+  const minutes = Math.floor(time / 60);
+  const seconds = time % 60;
+
+  function startTimer() {
+    setIsActive(true);
   }
+  
+  function resetTimer() {
+    clearTimeout(TimerTimeout);
+    setIsActive(false);
+    setTime(defaultTime);
+    setHasFinished(false)
+  }
+
+  useEffect(() => {
+    if (isActive && time > 0) {
+      TimerTimeout = setTimeout(() => {
+        setTime(time - 1);
+      }, 1000);
+    } else if (isActive && time === 0) {
+      setHasFinished(true);
+      setIsActive(false);
+      openEndingModal();
+    }
+  }, [isActive, time]);
+
+  function updateScore(points: number){
+    setScore(score + points);
+  }
+
+  function resetScore(){
+    setScore(0);
+  }
+  function resetGame(){
+    setCrew(shuffleCrewmates(crewmates, crewSliceLimit));
+    resetScore();
+    resetTimer();
+    startTimer();
+  }
+
+  // Modal
+  function openStartingModal(){
+    setIsStartingModalOpen(true);
+  }
+  function closeStartingModal(){
+    setIsStartingModalOpen(false);
+  }
+  function openEndingModal(){
+    setIsEndingModalOpen(true);
+  }
+  function closeEndingModal(){
+    resetGame();
+    setIsEndingModalOpen(false);
+  }
+
+  const [ crew, setCrew ] = useState<Crewmate[]>( () => {
+    return shuffleCrewmates(crewmates, crewSliceLimit);
+  });
+  
+  const [isStartingModalOpen, setIsStartingModalOpen] = useState(true);
+  const [isEndingModalOpen, setIsEndingModalOpen] = useState(false);
 
   function shuffleCrewmates(crewArray: Array<Crewmate>, sliceLimit: number): Crewmate[]{
     return shuffle(crewArray, sliceLimit);
@@ -76,11 +160,10 @@ export function CrewmatesProvider( { children }: CrewmateProviderProps ){
 
   function selectCrewmate(crewmate: Crewmate){
     if( crewmate.id.includes('*') ){
+      setCrew(shuffleCrewmates(crewmates, crewSliceLimit));
+      updateScore(1);
       toast.success(`Parabéns, você encontrou o metamorfo!   ${crewmate.id} diz: "Não sou eu! CONFIA"`, {
         position: toast.POSITION.BOTTOM_CENTER,
-        onClose: () => {
-          setCrew(shuffleCrewmates(crewmates, sliceLimit));
-        }
       });
     }
     else if( crewmate.id.includes('#') )
@@ -95,8 +178,32 @@ export function CrewmatesProvider( { children }: CrewmateProviderProps ){
   }
 
   return (
-    <CrewmatesContext.Provider value={{ crew, selectCrewmate, shuffleCrewmates }}>
+    <CrewmatesContext.Provider
+      value={
+        {
+          crew,
+          minutes,
+          seconds,
+          hasFinished,
+          isActive,
+          score,
+          selectCrewmate,
+          shuffleCrewmates,
+          updateScore,
+          resetGame,
+          startTimer,
+          resetTimer,
+          openStartingModal,
+          closeStartingModal,
+          openEndingModal,
+          closeEndingModal
+        }
+      }
+    >
       { children }
+      { isStartingModalOpen && <StartingModal /> }
+      { isEndingModalOpen && <EndingModal /> }
+
     </CrewmatesContext.Provider>
   )
 }
