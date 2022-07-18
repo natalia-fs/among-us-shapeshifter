@@ -1,5 +1,6 @@
 import { createContext, useContext, ReactNode, useState, useEffect } from "react";
 import { toast } from 'react-toastify';
+import { CustomToast } from "./components/CustomToast";
 import { EndingModal } from "./components/Modals/EndingModal";
 import { StartingModal } from "./components/Modals/StartingModal";
 
@@ -84,7 +85,7 @@ export function shuffle(sliceLimit?: number): Crewmate[]{
 let TimerTimeout: NodeJS.Timeout;
 
 export function CrewmatesProvider( { children }: CrewmateProviderProps ){
-  const defaultTime = 25;
+  const defaultTime = 600;
   const [time, setTime] = useState(defaultTime);
   const [isActive, setIsActive] = useState(false);
   const [hasFinished, setHasFinished] = useState(false);
@@ -158,21 +159,41 @@ export function CrewmatesProvider( { children }: CrewmateProviderProps ){
   }
 
   function selectCrewmate(crewmate: Crewmate){
+    let message = "";
+    const style = {
+      minWidth: "30rem",
+      boxShadow: "none",
+      border: 0,
+      background: "transparent"
+    }
+
     if( crewmate.id.includes('*') ){
       setCrew(shuffleCrewmates(crewSliceLimit));
       updateScore(1);
-      toast.success(`Parabéns, você encontrou o metamorfo!   ${crewmate.id} diz: "Não sou eu! CONFIA"`, {
-        position: toast.POSITION.BOTTOM_CENTER,
+      toast.success(`Parabéns! ${crewmate.id} era o metamorfo!`, {
+        position: toast.POSITION.TOP_LEFT,
+        theme: "colored"
       });
     }
-    else if( crewmate.id.includes('#') )
-      toast('"Cara, eu acabei de fazer visual task"', {
-        position: toast.POSITION.BOTTOM_CENTER
-      });
+    else if( crewmate.id.includes('#') ){
+      message = "Sem chance, eu acabei de fazer tarefa visual!";
+      toast(
+        <CustomToast crewmate={crewmate} message={message}></CustomToast>,
+        {
+          position: toast.POSITION.BOTTOM_LEFT,
+          style
+        }
+      )
+    }
     else{
-      toast(`${crewmate.id} diz: "Não sou o metamorfo, há dois tripulantes IGUAIS e eu não sou um deles!"`, {
-        position: toast.POSITION.BOTTOM_CENTER
-      });
+      message = "Não sou o metamorfo, há dois tripulantes IGUAIS e eu não sou um deles!";
+      toast(
+        <CustomToast crewmate={crewmate} message={message}></CustomToast>,
+        {
+          position: toast.POSITION.BOTTOM_LEFT,
+          style
+        }
+      )
     }
   }
 
