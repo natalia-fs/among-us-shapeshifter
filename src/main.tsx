@@ -9,13 +9,12 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <>
     <ToastContainer
       position="top-right"
-      autoClose={4000}
+      autoClose={3000}
       hideProgressBar={false}
       newestOnTop={false}
       closeOnClick
       rtl={false}
-      limit={4}
-      pauseOnHover
+      limit={1}
       pauseOnFocusLoss={false}
       draggable
     />
