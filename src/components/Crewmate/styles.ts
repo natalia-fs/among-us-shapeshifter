@@ -4,8 +4,12 @@ interface CrewmateStylesProps{
 }
 export const Container = styled.div<CrewmateStylesProps>`
   position: relative;
-
-  .crew{
+  cursor: pointer;
+  &:nth-child(4n-2), &:nth-child(4n-3){
+    transform: rotateY(180deg);
+  }
+  
+.crew{
   /* background-color: #840931; */
   height: 200px;
   width: 140px;
@@ -19,6 +23,7 @@ export const Container = styled.div<CrewmateStylesProps>`
   border-bottom: none;
   border-radius: 60px 80px 0 0;
   z-index: 1;
+  transform: scale(.8);
 }
 .crew:after{
   content: "";
@@ -45,6 +50,7 @@ export const Container = styled.div<CrewmateStylesProps>`
   border-bottom: none;
   border-radius: 60px 80px 0 0;
   z-index: 1;
+  transform: scale(.8);
 }
 
 .legs{
