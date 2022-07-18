@@ -18,10 +18,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       pauseOnFocusLoss={false}
       draggable
     />
-    <React.StrictMode>
-      <CrewmatesProvider>
-        <App />
-      </CrewmatesProvider>
-    </React.StrictMode>
+    <CrewmatesProvider>
+      <React.StrictMode>
+          <App />
+      </React.StrictMode>
+    </CrewmatesProvider>
   </>
 )
