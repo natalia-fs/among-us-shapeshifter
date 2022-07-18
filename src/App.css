@@ -79,7 +79,7 @@ button{
 .gridContainer{
   position: relative;
   min-width: 50vw;
-  height: calc(100vh - 15rem);
+  height: calc(100vh - 10rem);
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   /* z-index: -4; */
@@ -95,6 +95,7 @@ button{
 @media(max-width: 720px){
   .gridContainer{
     width: calc(100% - 1rem);
+    height: calc(100vh - 15rem);
     margin-right: .4rem;
   }
 }
