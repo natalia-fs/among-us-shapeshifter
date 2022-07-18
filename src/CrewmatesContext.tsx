@@ -1,5 +1,6 @@
 import { createContext, useContext, ReactNode, useState, useEffect } from "react";
 import { toast } from 'react-toastify';
+import { CustomToast } from "./components/CustomToast";
 import { EndingModal } from "./components/Modals/EndingModal";
 import { StartingModal } from "./components/Modals/StartingModal";
 
@@ -15,7 +16,7 @@ interface CrewmateProviderProps {
 interface CrewmatesContextData {
   crew: Crewmate[];
   selectCrewmate: (crewmate: Crewmate) => void;
-  shuffleCrewmates: (crewmates: Crewmate[], sliceLimit: number) => Crewmate[];
+  shuffleCrewmates: (sliceLimit: number) => Crewmate[];
   minutes: number;
   seconds: number;
   hasFinished: boolean;
@@ -59,15 +60,14 @@ const crewmates = [
 
 const crewSliceLimit = crewmates.length;
 
-export function shuffle(crewArray?: Array<Crewmate>, sliceLimit?: number): Crewmate[]{
-  if(!sliceLimit) sliceLimit = crewSliceLimit;
-  if(!crewArray) crewArray = [...crewmates];
-  
-  let slicedCrewmateArray = [...crewArray].slice(0, sliceLimit);
+export function shuffle(sliceLimit?: number): Crewmate[]{
+
+  let slicedCrewmateArray = JSON.parse(JSON.stringify(crewmates));
+  slicedCrewmateArray = slicedCrewmateArray.slice(0, sliceLimit);
   let currentIndex = slicedCrewmateArray.length+1;
-  let randomIndex;
+  let randomIndex = Math.floor(Math.random() * (currentIndex-1));
   // Alterando a string do id, para diferenciar os tripulantes clonados
-  let shapeshifter = slicedCrewmateArray[Math.floor(Math.random() * (currentIndex-1) )];
+  let shapeshifter = slicedCrewmateArray[randomIndex];
   shapeshifter.id+='*';
   slicedCrewmateArray.push({
     id: shapeshifter.id.replace('*','#'),
@@ -85,7 +85,7 @@ export function shuffle(crewArray?: Array<Crewmate>, sliceLimit?: number): Crewm
 let TimerTimeout: NodeJS.Timeout;
 
 export function CrewmatesProvider( { children }: CrewmateProviderProps ){
-  const defaultTime = 400;
+  const defaultTime = 600;
   const [time, setTime] = useState(defaultTime);
   const [isActive, setIsActive] = useState(false);
   const [hasFinished, setHasFinished] = useState(false);
@@ -126,7 +126,7 @@ export function CrewmatesProvider( { children }: CrewmateProviderProps ){
     setScore(0);
   }
   function resetGame(){
-    setCrew(shuffleCrewmates(crewmates, crewSliceLimit));
+    setCrew(shuffleCrewmates(crewSliceLimit));
     resetScore();
     resetTimer();
     startTimer();
@@ -148,32 +148,52 @@ export function CrewmatesProvider( { children }: CrewmateProviderProps ){
   }
 
   const [ crew, setCrew ] = useState<Crewmate[]>( () => {
-    return shuffleCrewmates(crewmates, crewSliceLimit);
+    return shuffleCrewmates(crewSliceLimit);
   });
   
   const [isStartingModalOpen, setIsStartingModalOpen] = useState(true);
   const [isEndingModalOpen, setIsEndingModalOpen] = useState(false);
 
-  function shuffleCrewmates(crewArray: Array<Crewmate>, sliceLimit: number): Crewmate[]{
-    return shuffle(crewArray, sliceLimit);
+  function shuffleCrewmates(sliceLimit: number): Crewmate[]{
+    return shuffle(sliceLimit);
   }
 
   function selectCrewmate(crewmate: Crewmate){
+    let message = "";
+    const style = {
+      minWidth: "30rem",
+      boxShadow: "none",
+      border: 0,
+      background: "transparent"
+    }
+
     if( crewmate.id.includes('*') ){
-      setCrew(shuffleCrewmates(crewmates, crewSliceLimit));
+      setCrew(shuffleCrewmates(crewSliceLimit));
       updateScore(1);
-      toast.success(`Parabéns, você encontrou o metamorfo!   ${crewmate.id} diz: "Não sou eu! CONFIA"`, {
-        position: toast.POSITION.BOTTOM_CENTER,
+      toast.success(`Parabéns! ${crewmate.id} era o metamorfo!`, {
+        position: toast.POSITION.TOP_LEFT,
+        theme: "colored"
       });
     }
-    else if( crewmate.id.includes('#') )
-      toast('"Cara, eu acabei de fazer visual task"', {
-        position: toast.POSITION.BOTTOM_CENTER
-      });
+    else if( crewmate.id.includes('#') ){
+      message = "Sem chance, eu acabei de fazer tarefa visual!";
+      toast(
+        <CustomToast crewmate={crewmate} message={message}></CustomToast>,
+        {
+          position: toast.POSITION.BOTTOM_LEFT,
+          style
+        }
+      )
+    }
     else{
-      toast(`${crewmate.id} diz: "Não sou o metamorfo, há dois tripulantes IGUAIS e eu não sou um deles!"`, {
-        position: toast.POSITION.BOTTOM_CENTER
-      });
+      message = "Não sou o metamorfo, há dois tripulantes IGUAIS e eu não sou um deles!";
+      toast(
+        <CustomToast crewmate={crewmate} message={message}></CustomToast>,
+        {
+          position: toast.POSITION.BOTTOM_LEFT,
+          style
+        }
+      )
     }
   }
 

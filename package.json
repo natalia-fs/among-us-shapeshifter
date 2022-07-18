@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@types/node": "^18.0.5",
+    "polished": "^4.2.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-toastify": "^9.0.5",
