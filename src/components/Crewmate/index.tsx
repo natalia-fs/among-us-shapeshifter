@@ -1,34 +1,30 @@
 import { Container } from './styles';
+import { Crewmate as CrewmateType, useCrewmates } from '../../CrewmatesContext';
 import './styles.css';
 
 interface CrewmateProps{
-  id: string;
-  color: string;
+  crewmate: CrewmateType;
 }
 
-export function Crewmate({ id, color } : CrewmateProps){
+export function Crewmate({ crewmate } : CrewmateProps){
+  const { selectCrewmate } = useCrewmates();
+
   function handleSelectCrewmate(){
-    if( id.includes('*') ){
-      console.log('SHAPESHIFTER!')
-    }
-    else if( id.includes('#') )
-    console.log('"Cara, eu acabei de fazer visual task"')
+    selectCrewmate(crewmate);
   }
   
   return (
-    // <span className="draw">
-      <Container
-        color={color}
-        onClick={handleSelectCrewmate}
-      >
-        <div className="crew-shadow" style={{background: color}}></div>
-        <div className="crew">
-          <div className="legs-shadow"></div>
-          <div className="legs"></div>
-          <div className="back"></div>
-          <div className="glass"></div>
-        </div>
-      </Container>
-    // </span>
+    <Container
+      color={crewmate.color}
+      onClick={handleSelectCrewmate}
+    >
+      <div className="crew-shadow" style={{background: crewmate.color}}></div>
+      <div className="crew">
+        <div className="legs-shadow"></div>
+        <div className="legs"></div>
+        <div className="back"></div>
+        <div className="glass"></div>
+      </div>
+    </Container>
   )
 }
