@@ -6,6 +6,11 @@
   box-sizing: border-box;
 }
 
+:root{
+  --primary: #64fc66;
+  --text-white: #e5e5e5;
+}
+
 body, button, textarea, input {
   font: 400 1rem "Inter", sans-serif;
 }

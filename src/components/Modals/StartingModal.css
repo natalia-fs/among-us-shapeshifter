@@ -26,7 +26,7 @@
 .container header {
   font-size: 3rem;
   font-weight: 600;
-  color: #e5e5e5;
+  color: var(--text-white);
   background: #141414;
 }
 
@@ -51,7 +51,5 @@
   font-size: 0;
 }
 .container>button.startGame{
-  width: 100%;
-  background: orange;
   padding: 1rem 2rem;
 }

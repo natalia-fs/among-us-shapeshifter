@@ -1,5 +1,5 @@
 .overlay {
-  background: rgba(242, 243, 245, 0.8);
+  background: #000000cc;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -17,39 +17,46 @@
   width: 100%;
   min-width: 40vw;
   max-width: 400px;
+  min-height: 60vh;
   padding: 2rem 3rem;
   border-radius: 5px;
   box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
   text-align: center;
   position: relative;
   z-index: 4;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .container header {
   font-size: 2rem;
   font-weight: 600;
-  color: #e5e5e5;
-  padding-bottom: .5rem;
-  margin-bottom: .5rem;
+  color: var(--text-white);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
   border-bottom: 1px solid #e5e5e5;
 }
 
 .container strong {
   font-size: 2.25rem;
-  color: #e5e5e5;
+  color: var(--text-white);
 }
 
 .container p {
   font-size: 1.25rem;
-  color: #e5e5e5;
-  margin-top: 0.25rem;
+  color: var(--text-white);
+  margin: .5rem 0;
 }
 
 .container button {
+  width: 100%;
+
   margin-top: 1rem;
   padding: 1rem 2rem;
   font-weight: 600;
-  background: yellowgreen;
+  background: var(--primary);
   text-transform: uppercase;
   border-radius: .5rem;
   border: 0;
