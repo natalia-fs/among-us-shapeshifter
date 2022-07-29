@@ -95,7 +95,8 @@ button{
 @media(max-width: 720px){
   .gridContainer{
     width: calc(100% - 1rem);
-    height: calc(100vh - 15rem);
+    height: calc(100vh - 12rem);
     margin-right: .4rem;
+    transform: scale(.85);
   }
 }
