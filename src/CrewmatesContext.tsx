@@ -85,7 +85,7 @@ export function shuffle(sliceLimit?: number): Crewmate[]{
 let TimerTimeout: NodeJS.Timeout;
 
 export function CrewmatesProvider( { children }: CrewmateProviderProps ){
-  const defaultTime = 600;
+  const defaultTime = 40;
   const [time, setTime] = useState(defaultTime);
   const [isActive, setIsActive] = useState(false);
   const [hasFinished, setHasFinished] = useState(false);
