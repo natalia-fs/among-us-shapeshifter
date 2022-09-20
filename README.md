@@ -7,7 +7,7 @@
 | :rocket: URL         | https://among-us-shapeshifter.vercel.app/
 | :fire: Desafio     | https://youtu.be/uXnbDYx2vxU
 
-![](https://github.com/natalia-fs/among-us-shapeshifter/tree/master/src/assets/preview.png?raw=true#vitrinedev)
+![](https://github.com/natalia-fs/among-us-shapeshifter/blob/master/src/assets/preview.png?raw=true?raw=true#vitrinedev)
 
 ## Detalhes do projeto
 
